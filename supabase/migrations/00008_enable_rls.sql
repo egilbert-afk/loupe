@@ -9,12 +9,27 @@ ALTER TABLE item_attributes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE item_photos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE lookup_attempts ENABLE ROW LEVEL SECURITY;
 
--- households: members can read their own household
+-- households: any authenticated user can create one (signup flow); members can
+-- read and update their own household; no DELETE policy (handled at app layer)
+CREATE POLICY "household_insert" ON households
+  FOR INSERT TO authenticated
+  WITH CHECK (true);
+
 CREATE POLICY "household_read" ON households
   FOR SELECT TO authenticated
   USING (id = get_my_household_id());
 
--- household_members: members can read all members of their household
+CREATE POLICY "household_update" ON households
+  FOR UPDATE TO authenticated
+  USING (id = get_my_household_id())
+  WITH CHECK (id = get_my_household_id());
+
+-- household_members: any authenticated user can insert (join via invite code or
+-- create household); members can read all members of their own household
+CREATE POLICY "household_members_insert" ON household_members
+  FOR INSERT TO authenticated
+  WITH CHECK (true);
+
 CREATE POLICY "household_members_read" ON household_members
   FOR SELECT TO authenticated
   USING (household_id = get_my_household_id());
