@@ -107,6 +107,32 @@ describe('POST /api/items', () => {
     expect(res.status).toBe(400)
   })
 
+  it('returns 400 when name is whitespace-only', async () => {
+    mockGetAuth.mockResolvedValue(AUTH_OK)
+    const res = await POST(makeRequest({ name: '   ', category: 'ring' }))
+    expect(res.status).toBe(400)
+  })
+
+  it('returns 400 when an attribute is missing attribute_name', async () => {
+    mockGetAuth.mockResolvedValue(AUTH_OK)
+    const res = await POST(makeRequest({
+      name: 'Ring',
+      category: 'ring',
+      attributes: [{ attribute_value: 'gold' }],
+    }))
+    expect(res.status).toBe(400)
+  })
+
+  it('returns 400 when an attribute has an empty attribute_value', async () => {
+    mockGetAuth.mockResolvedValue(AUTH_OK)
+    const res = await POST(makeRequest({
+      name: 'Ring',
+      category: 'ring',
+      attributes: [{ attribute_name: 'metal', attribute_value: '   ' }],
+    }))
+    expect(res.status).toBe(400)
+  })
+
   it('returns 400 when body is not valid JSON', async () => {
     mockGetAuth.mockResolvedValue(AUTH_OK)
     const req = new NextRequest('http://localhost/api/items', {

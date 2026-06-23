@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     typeof body !== 'object' ||
     body === null ||
     typeof (body as Record<string, unknown>).name !== 'string' ||
-    !(body as Record<string, unknown>).name ||
+    !(body as Record<string, unknown>).name.trim() ||
     !VALID_CATEGORIES.includes((body as Record<string, unknown>).category as Category)
   ) {
     return NextResponse.json(
@@ -69,6 +69,16 @@ export async function POST(request: NextRequest) {
     story?: string | null
     acquired_era?: string | null
     attributes?: { attribute_name: string; attribute_value: string; order_index?: number }[]
+  }
+
+  if (Array.isArray(attributes) && attributes.some(
+    a => typeof a?.attribute_name !== 'string' || !a.attribute_name.trim() ||
+         typeof a?.attribute_value !== 'string' || !a.attribute_value.trim()
+  )) {
+    return NextResponse.json(
+      { error: 'Each attribute must have a non-empty attribute_name and attribute_value' },
+      { status: 400 }
+    )
   }
 
   const supabase = await createClient()
