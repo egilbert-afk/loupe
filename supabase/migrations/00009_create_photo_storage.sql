@@ -5,7 +5,7 @@ INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_typ
 VALUES (
   'item-photos',
   'item-photos',
-  false,
+  true,
   10485760,
   ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/heic']
 );

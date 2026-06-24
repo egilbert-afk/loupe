@@ -106,7 +106,7 @@ export async function POST(request: NextRequest, { params }: Params) {
     .select('*', { count: 'exact', head: true })
     .eq('item_id', itemId)
 
-  const isFirst = count === 0
+  const isFirst = count === null || count === 0
 
   const { data: photo, error: insertError } = await supabase
     .from('item_photos')
