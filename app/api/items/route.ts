@@ -40,12 +40,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
+  const b = body as Record<string, unknown>
   if (
     typeof body !== 'object' ||
     body === null ||
-    typeof (body as Record<string, unknown>).name !== 'string' ||
-    !(body as Record<string, unknown>).name.trim() ||
-    !VALID_CATEGORIES.includes((body as Record<string, unknown>).category as Category)
+    typeof b.name !== 'string' ||
+    !b.name.trim() ||
+    !VALID_CATEGORIES.includes(b.category as Category)
   ) {
     return NextResponse.json(
       { error: 'name (string) and category (ring|necklace|bracelet|earrings|brooch|watch|other) are required' },
