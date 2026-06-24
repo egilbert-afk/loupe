@@ -56,6 +56,8 @@ export default function AttributeSection({ itemId, initialAttributes }: {
     if (res.ok) {
       setAttributes(prev => prev.filter(a => a.id !== attrId))
       if (editingId === attrId) setEditingId(null)
+    } else {
+      setError('Failed to delete. Please try again.')
     }
   }
 
