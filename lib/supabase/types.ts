@@ -32,7 +32,20 @@ export type Database = {
           created_at?: string
           updated_at?: string
         }
-        Update: Partial<Database['public']['Tables']['households']['Insert']>
+        Update: {
+          id?: string
+          name?: string
+          invite_code?: string
+          is_beta?: boolean
+          plan?: 'free' | 'paid'
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          grandfathered_price?: number | null
+          subscribed_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       household_members: {
         Row: {
@@ -51,7 +64,15 @@ export type Database = {
           invited_by?: string | null
           joined_at?: string
         }
-        Update: Partial<Database['public']['Tables']['household_members']['Insert']>
+        Update: {
+          id?: string
+          household_id?: string
+          user_id?: string
+          role?: 'owner' | 'member'
+          invited_by?: string | null
+          joined_at?: string
+        }
+        Relationships: []
       }
       items: {
         Row: {
@@ -86,7 +107,23 @@ export type Database = {
           created_at?: string
           updated_at?: string
         }
-        Update: Partial<Database['public']['Tables']['items']['Insert']>
+        Update: {
+          id?: string
+          household_id?: string
+          created_by?: string
+          name?: string
+          category?: 'ring' | 'necklace' | 'bracelet' | 'earrings' | 'brooch' | 'watch' | 'other'
+          given_by?: string | null
+          headline?: string | null
+          story?: string | null
+          acquired_era?: string | null
+          estimated_value_cents?: number | null
+          appraisal_doc_url?: string | null
+          is_archived?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       item_attributes: {
         Row: {
@@ -103,7 +140,14 @@ export type Database = {
           attribute_value: string
           order_index?: number
         }
-        Update: Partial<Database['public']['Tables']['item_attributes']['Insert']>
+        Update: {
+          id?: string
+          item_id?: string
+          attribute_name?: string
+          attribute_value?: string
+          order_index?: number
+        }
+        Relationships: []
       }
       item_photos: {
         Row: {
@@ -124,7 +168,16 @@ export type Database = {
           order_index?: number
           created_at?: string
         }
-        Update: Partial<Database['public']['Tables']['item_photos']['Insert']>
+        Update: {
+          id?: string
+          item_id?: string
+          photo_url?: string
+          is_primary?: boolean
+          caption?: string | null
+          order_index?: number
+          created_at?: string
+        }
+        Relationships: []
       }
       lookup_attempts: {
         Row: {
@@ -145,14 +198,26 @@ export type Database = {
           was_correct_top_match?: boolean | null
           created_at?: string
         }
-        Update: Partial<Database['public']['Tables']['lookup_attempts']['Insert']>
+        Update: {
+          id?: string
+          household_id?: string
+          attempted_by?: string
+          candidate_item_ids?: string[] | null
+          selected_item_id?: string | null
+          was_correct_top_match?: boolean | null
+          created_at?: string
+        }
+        Relationships: []
       }
     }
+    Views: Record<string, never>
     Functions: {
       get_my_household_id: {
         Args: Record<string, never>
         Returns: string
       }
     }
+    Enums: Record<string, never>
+    CompositeTypes: Record<string, never>
   }
 }
