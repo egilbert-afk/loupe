@@ -216,7 +216,7 @@ describe('PATCH /api/match/[attemptId]/selection', () => {
 
   it('returns 200 gracefully when attempt is not found', async () => {
     mockGetAuth.mockResolvedValue(AUTH_OK)
-    const attemptChain = makeChain('maybySingle', { data: null, error: null })
+    const attemptChain = makeChain('maybeSingle', { data: null, error: null })
     mockCreateClient.mockResolvedValue({ from: vi.fn().mockReturnValue(attemptChain) } as never)
 
     const res = await PATCH(makePatchReq({ selected_item_id: ITEM_ID }), makeParams())
